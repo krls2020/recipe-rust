@@ -3,6 +3,8 @@ use dotenv::dotenv;
 use std::{env, fmt};
 use tokio_postgres::NoTls;
 use uuid::Uuid;
+use serde_json::json;
+
 
 #[derive(Debug)] // Automatically derive Debug trait for AppError
 struct AppError(tokio_postgres::Error);
@@ -63,13 +65,11 @@ async fn add_entry() -> Result<HttpResponse, AppError> {
     let count: i64 = row.get(0);
 
 //     Ok(HttpResponse::Ok().body(format!("Entry added successfully with random data: {}. Total count: {}", data, count)))
-    Ok(HttpResponse::Ok().json({
-        let mut response = std::collections::HashMap::new();
-        response.insert("message", "This is a simple, basic GO application running on Zerops.io, each request adds an entry to the PostgreSQL database and returns a count. See the source repository (https://github.com/zeropsio/recipe-go) for more information.");
-        response.insert("newEntry", data.as_str());
-        response.insert("count", count.to_string().as_str());
-        response
-    }))
+    Ok(HttpResponse::Ok().json(json!({
+        "message": "This is a simple, basic Rust application running on Zerops.io, each request adds an entry to the PostgreSQL database and returns a count. See the source repository (https://github.com/zeropsio/recipe-rust) for more information.",
+        "newEntry": data,
+        "count": count
+    })))
 }
 
 async fn status() -> impl Responder {
