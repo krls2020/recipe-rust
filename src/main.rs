@@ -8,8 +8,6 @@ use log::{info, warn, error, debug, trace};
 use env_logger;
 
 
-
-
 #[derive(Debug)] // Automatically derive Debug trait for AppError
 struct AppError(tokio_postgres::Error);
 
@@ -68,9 +66,12 @@ async fn add_entry() -> Result<HttpResponse, AppError> {
     let row = client.query_one("SELECT COUNT(*) FROM entries;", &[]).await.map_err(AppError::from)?;
     let count: i64 = row.get(0);
 
-
-    warn!("log - warn");
-    info!("log - info");
+    // Log messages at various levels
+    info!("This is an info message.");
+    warn!("This is a warning message.");
+    error!("This is an error message.");
+    debug!("This is a debug message.");
+    trace!("This is a trace message.");
 
     Ok(HttpResponse::Ok().json(json!({
         "message": "This is a simple, basic Rust application running on Zerops.io, each request adds an entry to the PostgreSQL database and returns a count. See the source repository (https://github.com/zeropsio/recipe-rust) for more information.",
@@ -79,21 +80,10 @@ async fn add_entry() -> Result<HttpResponse, AppError> {
     })))
 }
 
-async fn status() -> impl Responder {
-
-    // Log messages at various levels
-    info!("This is an info message.");
-    warn!("This is a warning message.");
-    error!("This is an error message.");
-    debug!("This is a debug message.");
-    trace!("This is a trace message.");
-
-    HttpResponse::Ok().json({
-        let mut response = std::collections::HashMap::new();
-        response.insert("status", "UP");
-        response
-    })
-
+async fn status() -> Result<HttpResponse, AppError> {
+    Ok(HttpResponse::Ok().json(json!({
+        "status": "UP",
+    })))
 }
 
 async fn not_found() -> impl Responder {
@@ -102,13 +92,8 @@ async fn not_found() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    dotenv().ok();
-
-
-    // Initialize the env_logger
     env_logger::init();
-
-
+    dotenv().ok();
 
     println!("Starting server at http://0.0.0.0:8080");
 

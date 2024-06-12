@@ -31,4 +31,4 @@ Further things to think about when running more complex, highly available Rust p
 
 - Containers are volatile - use Zerops object storage to store your files
 - Use Zerops Redis (KeyDB) for caching, storing sessions and pub/sub messaging
-- Use more advanced logging lib, such as [Logrus](https://github.com/sirupsen/logrus), [Zap](https://github.com/uber-rust/zap) or [ZeroLog](https://github.com/rs/zerolog)
+- Use more advanced logging lib, such as [slog](https://github.com/slog-rs/slog)
