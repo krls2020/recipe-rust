@@ -96,7 +96,7 @@ async fn main() -> std::io::Result<()> {
             .service(web::resource("/status").route(web::get().to(status)))
             .default_service(web::route().to(not_found)) // Catch-all for unmatched routes
     })
-    .bind("0.0.0.0:8080")?
+    .bind("[::]:8080")?
     .run()
     .await
 }
