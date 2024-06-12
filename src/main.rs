@@ -4,6 +4,8 @@ use std::{env, fmt};
 use tokio_postgres::NoTls;
 use uuid::Uuid;
 use serde_json::json;
+use log::{info, warn};
+
 
 
 #[derive(Debug)] // Automatically derive Debug trait for AppError
@@ -64,7 +66,10 @@ async fn add_entry() -> Result<HttpResponse, AppError> {
     let row = client.query_one("SELECT COUNT(*) FROM entries;", &[]).await.map_err(AppError::from)?;
     let count: i64 = row.get(0);
 
-//     Ok(HttpResponse::Ok().body(format!("Entry added successfully with random data: {}. Total count: {}", data, count)))
+
+    warn!("log - warn");
+    info!("log - info");
+
     Ok(HttpResponse::Ok().json(json!({
         "message": "This is a simple, basic Rust application running on Zerops.io, each request adds an entry to the PostgreSQL database and returns a count. See the source repository (https://github.com/zeropsio/recipe-rust) for more information.",
         "newEntry": data,
@@ -73,11 +78,13 @@ async fn add_entry() -> Result<HttpResponse, AppError> {
 }
 
 async fn status() -> impl Responder {
+
     HttpResponse::Ok().json({
         let mut response = std::collections::HashMap::new();
         response.insert("status", "UP");
         response
     })
+
 }
 
 async fn not_found() -> impl Responder {
