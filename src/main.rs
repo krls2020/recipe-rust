@@ -70,6 +70,8 @@ async fn add_entry() -> Result<HttpResponse, AppError> {
     warn!("log - warn");
     info!("log - info");
 
+    println!("Starting server at http://0.0.0.0:8080");
+
     Ok(HttpResponse::Ok().json(json!({
         "message": "This is a simple, basic Rust application running on Zerops.io, each request adds an entry to the PostgreSQL database and returns a count. See the source repository (https://github.com/zeropsio/recipe-rust) for more information.",
         "newEntry": data,
@@ -78,7 +80,7 @@ async fn add_entry() -> Result<HttpResponse, AppError> {
 }
 
 async fn status() -> impl Responder {
-
+println!("Starting server at http://0.0.0.0:8080");
     HttpResponse::Ok().json({
         let mut response = std::collections::HashMap::new();
         response.insert("status", "UP");
