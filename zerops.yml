@@ -4,7 +4,9 @@ zerops:
 #      os: ubuntu
       base: rust@1.78
       buildCommands:
-        - cargo build --release -j5
+        - |
+          zsc scale cpu max 10m
+          cargo build --release -j5
       deploy:
         - ./target/release/~/rust
     run:
